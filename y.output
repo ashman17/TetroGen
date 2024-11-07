@@ -1,0 +1,149 @@
+Grammar
+
+    0 $accept: E $end
+
+    1 E: S
+
+    2 S: a B
+
+    3 B: a B A B
+    4  | /* empty */
+
+    5 @1: /* empty */
+
+    6 A: PLUS @1 STAR
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+a (258) 2 3
+STAR (259) 6
+PLUS (260) 6
+
+
+Nonterminals, with rules where they appear
+
+$accept (6)
+    on left: 0
+E (7)
+    on left: 1, on right: 0
+S (8)
+    on left: 2, on right: 1
+B (9)
+    on left: 3 4, on right: 2 3
+A (10)
+    on left: 6, on right: 3
+@1 (11)
+    on left: 5, on right: 6
+
+
+state 0
+
+    0 $accept: . E $end
+
+    a  shift, and go to state 1
+
+    E  go to state 2
+    S  go to state 3
+
+
+state 1
+
+    2 S: a . B
+
+    a  shift, and go to state 4
+
+    $default  reduce using rule 4 (B)
+
+    B  go to state 5
+
+
+state 2
+
+    0 $accept: E . $end
+
+    $end  shift, and go to state 6
+
+
+state 3
+
+    1 E: S .
+
+    $default  reduce using rule 1 (E)
+
+
+state 4
+
+    3 B: a . B A B
+
+    a  shift, and go to state 4
+
+    $default  reduce using rule 4 (B)
+
+    B  go to state 7
+
+
+state 5
+
+    2 S: a B .
+
+    $default  reduce using rule 2 (S)
+
+
+state 6
+
+    0 $accept: E $end .
+
+    $default  accept
+
+
+state 7
+
+    3 B: a B . A B
+
+    PLUS  shift, and go to state 8
+
+    A  go to state 9
+
+
+state 8
+
+    6 A: PLUS . @1 STAR
+
+    $default  reduce using rule 5 (@1)
+
+    @1  go to state 10
+
+
+state 9
+
+    3 B: a B A . B
+
+    a  shift, and go to state 4
+
+    $default  reduce using rule 4 (B)
+
+    B  go to state 11
+
+
+state 10
+
+    6 A: PLUS @1 . STAR
+
+    STAR  shift, and go to state 12
+
+
+state 11
+
+    3 B: a B A B .
+
+    $default  reduce using rule 3 (B)
+
+
+state 12
+
+    6 A: PLUS @1 STAR .
+
+    $default  reduce using rule 6 (A)
